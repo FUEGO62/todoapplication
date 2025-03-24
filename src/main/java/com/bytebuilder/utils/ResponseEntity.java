@@ -1,7 +1,6 @@
 package com.bytebuilder.utils;
 
 
-import com.bytebuilder.data.models.Status;
 import lombok.Getter;
 import lombok.Setter;
 

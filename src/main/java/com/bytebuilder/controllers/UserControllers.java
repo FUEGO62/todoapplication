@@ -1,6 +1,5 @@
 package com.bytebuilder.controllers;
 
-import com.bytebuilder.data.models.Status;
 import com.bytebuilder.dtos.UserSignUpRequest;
 import com.bytebuilder.dtos.UserLogInResponse;
 import com.bytebuilder.services.UserServices;
