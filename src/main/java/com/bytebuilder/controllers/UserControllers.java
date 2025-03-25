@@ -1,5 +1,6 @@
 package com.bytebuilder.controllers;
 
+import com.bytebuilder.data.models.User;
 import com.bytebuilder.dtos.*;
 import com.bytebuilder.services.UserServices;
 import com.bytebuilder.utils.JwtUtil;
@@ -7,7 +8,9 @@ import com.bytebuilder.utils.StatusEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,16 @@ public class UserControllers {
 
     @Autowired
     private UserServices userServices;
+
+
+    @PostMapping("/getEmail")
+    public ResponseEntity<String> getUsername(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            return ResponseEntity.ok("Username from JWT: " + userDetails.getUsername());
+        } else {
+            return ResponseEntity.ok("No authenticated user found.");
+        }
+    }
 
     @PostMapping ("/logIn")
     public ResponseEntity<?> logIn(@RequestBody @Valid UserLogInRequest userLogInRequest, BindingResult bindingResult) {
