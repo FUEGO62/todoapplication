@@ -12,10 +12,10 @@ import lombok.Setter;
 @Setter
 public class UserSignUpRequest {
     @Email(message = "invalid email")
-    @NotNull
+    @NotNull(message = "email is a required field")
     private String email;
 
     @Size(min = 8, message = "password is not secure enough")
-    @NotNull
+    @NotNull(message = "email is a required field")
     private String password;
 }

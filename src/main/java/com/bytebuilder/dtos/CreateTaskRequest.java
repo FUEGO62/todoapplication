@@ -7,12 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserLogInRequest {
-    @NotNull
-    @NotBlank
-    private String email;
+public class CreateTaskRequest {
 
     @NotNull
     @NotBlank
-    private String password;
+    private String name;
+    @NotNull
+    @NotBlank
+    private String description;
 }

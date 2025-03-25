@@ -4,4 +4,6 @@ import com.bytebuilder.data.models.Task;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface TaskRepository extends MongoRepository<Task, String> {
+    boolean existsByName(String name);
+    Task findByName(String name);
 }

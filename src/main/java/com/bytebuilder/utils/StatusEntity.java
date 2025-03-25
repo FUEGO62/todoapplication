@@ -6,9 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResponseEntity {
+public class StatusEntity {
 
     private Object response;
     private String message;
-    private Status status;
 }
