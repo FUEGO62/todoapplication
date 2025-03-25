@@ -2,6 +2,7 @@ package com.bytebuilder.controllers;
 
 import com.bytebuilder.dtos.*;
 import com.bytebuilder.services.UserServices;
+import com.bytebuilder.utils.JwtUtil;
 import com.bytebuilder.utils.StatusEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import java.util.List;
 public class UserControllers {
 
     @Autowired
+    private JwtUtil jwtUtil ;
+
+    @Autowired
     private UserServices userServices;
 
     @PostMapping ("/logIn")
@@ -29,8 +33,9 @@ public class UserControllers {
         }
 
         try{
-            UserLogInResponse response = userServices.logIn(userLogInRequest);
-            entity.setResponse(response);
+            userServices.logIn(userLogInRequest);
+            String token = jwtUtil.generateToken(userLogInRequest.getEmail());
+            entity.setResponse(token);
             entity.setMessage(HttpStatus.OK.toString());
             return ResponseEntity.status(HttpStatus.OK).body(entity);
         }
