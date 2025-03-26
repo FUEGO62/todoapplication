@@ -61,9 +61,7 @@ public class UserServicesImpl implements UserServices {
     public UserLogInResponse addTask(AddTaskRequest addTaskRequest) {
 
         CreateTaskRequest createTaskRequest = addTaskRequest.getCreateTaskRequest();
-        UserLogInRequest userLogInRequest = addTaskRequest.getUserLogInRequest();
-        logIn(userLogInRequest);
-        User user = userRepository.findByEmail(userLogInRequest.getEmail());
+        User user = userRepository.findByEmail(addTaskRequest.getEmail());
         Task task = map(taskServices.createTask(createTaskRequest));
         List<Task> tasks = user.getTasks();
         tasks.add(task);
@@ -75,41 +73,39 @@ public class UserServicesImpl implements UserServices {
     @Override
     public CreateTaskResponse markTaskAsCompleted(FindTaskRequest findTaskRequest) {
         String taskId = findTaskRequest.getId();
-        UserLogInRequest userLogInRequest = findTaskRequest.getUserLogInRequest();
-        logIn(userLogInRequest);
+        String email = findTaskRequest.getEmail();
         CreateTaskResponse response = taskServices.markAsCompleted(taskId);
-        userRepository.save(userRepository.findByEmail(userLogInRequest.getEmail()));
+        userRepository.save(userRepository.findByEmail(email));
         return response;
     }
 
     @Override
     public CreateTaskResponse markTaskAsUncompleted(FindTaskRequest findTaskRequest) {
         String taskId = findTaskRequest.getId();
-        UserLogInRequest userLogInRequest = findTaskRequest.getUserLogInRequest();
-        logIn(userLogInRequest);
+        String email = findTaskRequest.getEmail();
         CreateTaskResponse response = taskServices.markAsUncompleted(taskId);
-        userRepository.save(userRepository.findByEmail(userLogInRequest.getEmail()));
+        userRepository.save(userRepository.findByEmail(email));
         return response;
     }
 
     @Override
-    public List<CreateTaskResponse> viewPendingTasks(UserLogInRequest userLogInRequest) {
-        logIn(userLogInRequest);
-        User user = userRepository.findByEmail(userLogInRequest.getEmail());
+    public List<CreateTaskResponse> viewPendingTasks(String email) {
+
+        User user = userRepository.findByEmail(email);
         return taskServices.getPendingTasks(user);
     }
 
     @Override
-    public List<CreateTaskResponse> viewCompletedTasks(UserLogInRequest userLogInRequest) {
-        logIn(userLogInRequest);
-        User user = userRepository.findByEmail(userLogInRequest.getEmail());
+    public List<CreateTaskResponse> viewCompletedTasks(String email) {
+
+        User user = userRepository.findByEmail(email);
         return taskServices.getCompletedTasks(user);
     }
 
     @Override
     public List<CreateTaskResponse> deleteTask(FindTaskRequest findTaskRequest) {
-        logIn(findTaskRequest.getUserLogInRequest());
-        User user = userRepository.findByEmail(findTaskRequest.getUserLogInRequest().getEmail());
+
+        User user = userRepository.findByEmail(findTaskRequest.getEmail());
         Task task = map(taskServices.deleteTask(findTaskRequest.getId()));
         List<Task> tasks = user.getTasks();
         for(Task task1 : tasks) {

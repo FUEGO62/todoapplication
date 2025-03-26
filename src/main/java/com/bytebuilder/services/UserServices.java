@@ -18,10 +18,10 @@ import java.util.List;
 
      CreateTaskResponse markTaskAsUncompleted(FindTaskRequest findTaskRequest) ;
 
-     List<CreateTaskResponse> viewPendingTasks(UserLogInRequest userLogInRequest) ;
+     List<CreateTaskResponse> viewPendingTasks(String email) ;
 
 
-     List<CreateTaskResponse> viewCompletedTasks(UserLogInRequest userLogInRequest) ;
+     List<CreateTaskResponse> viewCompletedTasks(String email) ;
 
 
      List<CreateTaskResponse> deleteTask(FindTaskRequest findTaskRequest) ;

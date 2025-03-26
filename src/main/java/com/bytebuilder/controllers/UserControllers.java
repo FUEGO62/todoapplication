@@ -1,6 +1,5 @@
 package com.bytebuilder.controllers;
 
-import com.bytebuilder.data.models.User;
 import com.bytebuilder.dtos.*;
 import com.bytebuilder.services.UserServices;
 import com.bytebuilder.utils.JwtUtil;
@@ -84,7 +83,7 @@ public class UserControllers {
     }
 
     @PostMapping("/addTask")
-    public ResponseEntity<?> addTask(@RequestBody @Valid AddTaskRequest addTaskRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> addTask(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid CreateTaskRequest createTaskRequest, BindingResult bindingResult) {
         StatusEntity entity = new StatusEntity();
         if (bindingResult.hasErrors()) {
             entity.setMessage(bindingResult.getAllErrors().getFirst().getDefaultMessage());
@@ -92,6 +91,9 @@ public class UserControllers {
         }
 
         try{
+            AddTaskRequest addTaskRequest = new AddTaskRequest();
+            addTaskRequest.setCreateTaskRequest(createTaskRequest);
+            addTaskRequest.setEmail(userDetails.getUsername());
             UserLogInResponse response = userServices.addTask(addTaskRequest);
             entity.setResponse(response);
             entity.setMessage(HttpStatus.CREATED.toString());
@@ -108,7 +110,7 @@ public class UserControllers {
     }
 
     @PostMapping("/markAsCompleted")
-    public ResponseEntity<?> markAsCompleted(@RequestBody @Valid FindTaskRequest findTaskRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> markAsCompleted(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ModifyTaskRequest modifyTaskRequest, BindingResult bindingResult) {
         StatusEntity entity = new StatusEntity();
         if (bindingResult.hasErrors()) {
             entity.setMessage(bindingResult.getAllErrors().getFirst().getDefaultMessage());
@@ -116,6 +118,9 @@ public class UserControllers {
         }
 
         try{
+            FindTaskRequest findTaskRequest = new FindTaskRequest();
+            findTaskRequest.setId(modifyTaskRequest.getId());
+            findTaskRequest.setEmail(userDetails.getUsername());
             CreateTaskResponse response = userServices.markTaskAsCompleted(findTaskRequest);
             entity.setResponse(response);
             entity.setMessage(HttpStatus.OK.toString());
@@ -132,7 +137,7 @@ public class UserControllers {
     }
 
     @PostMapping("/markAsUncompleted")
-    public ResponseEntity<?> markAsUncompleted(@RequestBody @Valid FindTaskRequest findTaskRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> markAsUncompleted(@AuthenticationPrincipal UserDetails userDetails, @RequestBody ModifyTaskRequest modifyTaskRequest, BindingResult bindingResult) {
         StatusEntity entity = new StatusEntity();
         if (bindingResult.hasErrors()) {
             entity.setMessage(bindingResult.getAllErrors().getFirst().getDefaultMessage());
@@ -140,6 +145,9 @@ public class UserControllers {
         }
 
         try{
+            FindTaskRequest findTaskRequest = new FindTaskRequest();
+            findTaskRequest.setId(modifyTaskRequest.getId());
+            findTaskRequest.setEmail(userDetails.getUsername());
             CreateTaskResponse response = userServices.markTaskAsUncompleted(findTaskRequest);
             entity.setResponse(response);
             entity.setMessage(HttpStatus.OK.toString());
@@ -156,15 +164,11 @@ public class UserControllers {
     }
 
     @PostMapping("/viewCompletedTasks")
-    public ResponseEntity<?> viewCompletedTask(@RequestBody @Valid UserLogInRequest userLogInRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> viewCompletedTask(@AuthenticationPrincipal UserDetails userDetails) {
         StatusEntity entity = new StatusEntity();
-        if (bindingResult.hasErrors()) {
-            entity.setMessage(bindingResult.getAllErrors().getFirst().getDefaultMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(entity);
-        }
 
         try{
-            List<CreateTaskResponse> response = userServices.viewCompletedTasks(userLogInRequest);
+            List<CreateTaskResponse> response = userServices.viewCompletedTasks(userDetails.getUsername());
             entity.setResponse(response);
             entity.setMessage(HttpStatus.OK.toString());
             return ResponseEntity.status(HttpStatus.OK).body(entity);
@@ -180,15 +184,11 @@ public class UserControllers {
     }
 
     @PostMapping("/viewPendingTasks")
-    public ResponseEntity<?> viewPendingTask(@RequestBody @Valid UserLogInRequest userLogInRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> viewPendingTask(@AuthenticationPrincipal UserDetails userDetails ) {
         StatusEntity entity = new StatusEntity();
-        if (bindingResult.hasErrors()) {
-            entity.setMessage(bindingResult.getAllErrors().getFirst().getDefaultMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(entity);
-        }
 
         try{
-            List<CreateTaskResponse> response = userServices.viewPendingTasks(userLogInRequest);
+            List<CreateTaskResponse> response = userServices.viewPendingTasks(userDetails.getUsername());
             entity.setResponse(response);
             entity.setMessage(HttpStatus.OK.toString());
             return ResponseEntity.status(HttpStatus.OK).body(entity);
@@ -204,7 +204,7 @@ public class UserControllers {
     }
 
     @PostMapping("/deleteTask")
-    public ResponseEntity<?> deleteTask(@RequestBody @Valid FindTaskRequest findTaskRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> deleteTask(@RequestBody ModifyTaskRequest modifyTaskRequest,@AuthenticationPrincipal UserDetails userDetails, BindingResult bindingResult) {
         StatusEntity entity = new StatusEntity();
         if (bindingResult.hasErrors()) {
             entity.setMessage(bindingResult.getAllErrors().getFirst().getDefaultMessage());
@@ -212,6 +212,9 @@ public class UserControllers {
         }
 
         try{
+            FindTaskRequest findTaskRequest = new FindTaskRequest();
+            findTaskRequest.setId(modifyTaskRequest.getId());
+            findTaskRequest.setEmail(userDetails.getUsername());
             List<CreateTaskResponse> response = userServices.deleteTask(findTaskRequest);
             entity.setResponse(response);
             entity.setMessage(HttpStatus.OK.toString());

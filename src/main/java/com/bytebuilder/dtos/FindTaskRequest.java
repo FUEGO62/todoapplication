@@ -9,7 +9,7 @@ import lombok.Setter;
 public class FindTaskRequest {
 
     @NotNull
-    private UserLogInRequest userLogInRequest;
+    private String email;
     @NotNull
     private String id;
 }
