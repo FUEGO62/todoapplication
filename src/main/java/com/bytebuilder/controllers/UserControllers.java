@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:5179")
 public class UserControllers {
 
     @Autowired
@@ -26,15 +27,6 @@ public class UserControllers {
     @Autowired
     private UserServices userServices;
 
-
-    @PostMapping("/getEmail")
-    public ResponseEntity<String> getUsername(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails != null) {
-            return ResponseEntity.ok("Username from JWT: " + userDetails.getUsername());
-        } else {
-            return ResponseEntity.ok("No authenticated user found.");
-        }
-    }
 
     @PostMapping ("/logIn")
     public ResponseEntity<?> logIn(@RequestBody @Valid UserLogInRequest userLogInRequest, BindingResult bindingResult) {

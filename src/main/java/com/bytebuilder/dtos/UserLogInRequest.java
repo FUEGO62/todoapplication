@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 public class UserLogInRequest {
     @NotNull
-    @NotBlank
+    @NotBlank(message = "email is a required field")
     private String email;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "password is a required field")
     private String password;
 }

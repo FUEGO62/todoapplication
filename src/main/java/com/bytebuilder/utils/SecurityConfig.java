@@ -22,7 +22,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/logIn", "/user/signUp").permitAll()
+                        .requestMatchers("/user/logIn",
+                                "/user/addTask",
+                                "/user/viewCompletedTasks",
+                                "/user/markAsCompleted",
+                                "/user/deleteTask",
+                                "/user/signUp",
+                                "/user/viewPendingTasks"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

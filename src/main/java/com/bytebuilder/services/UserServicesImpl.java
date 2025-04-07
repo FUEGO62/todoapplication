@@ -75,7 +75,15 @@ public class UserServicesImpl implements UserServices {
         String taskId = findTaskRequest.getId();
         String email = findTaskRequest.getEmail();
         CreateTaskResponse response = taskServices.markAsCompleted(taskId);
-        userRepository.save(userRepository.findByEmail(email));
+        User user = userRepository.findByEmail(email);
+        List<Task> tasks = user.getTasks();
+        for (Task task : tasks) {
+            if(task.getId().equals(taskId)) {
+                task.setCompleted(true);
+            }
+        }
+        user.setTasks(tasks);
+        userRepository.save(user);
         return response;
     }
 
@@ -84,7 +92,15 @@ public class UserServicesImpl implements UserServices {
         String taskId = findTaskRequest.getId();
         String email = findTaskRequest.getEmail();
         CreateTaskResponse response = taskServices.markAsUncompleted(taskId);
-        userRepository.save(userRepository.findByEmail(email));
+        User user = userRepository.findByEmail(email);
+        List<Task> tasks = user.getTasks();
+        for (Task task : tasks) {
+            if(task.getId().equals(taskId)) {
+                task.setCompleted(true);
+            }
+        }
+        user.setTasks(tasks);
+        userRepository.save(user);
         return response;
     }
 

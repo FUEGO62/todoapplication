@@ -15,7 +15,6 @@ public class JwtUtil {
 
     private static final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    // Generate JWT Token
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -25,7 +24,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Validate JWT and extract username
+
     public String extractEmail(String token) {
         try {
             return Jwts.parser()
@@ -35,7 +34,7 @@ public class JwtUtil {
                     .getBody()
                     .getSubject();
         } catch (JwtException e) {
-            return null; // Invalid token
+            return null;
         }
     }
 }
